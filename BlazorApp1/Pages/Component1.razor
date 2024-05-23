@@ -1,0 +1,78 @@
+﻿@using Data
+@page "/Student"
+<p>Кол-во записей: @currentCount</p>
+<input type="text" @bind="name" placeholder="Имя" />
+<input type="text" @bind="surname" placeholder="Фамилия" />
+<input type="text" @bind="lastname" placeholder="Отчество" />
+<input type="text" @bind="group" placeholder="Группа" />
+<input type="text" @bind="dateOfBirth" placeholdeк="День рождения" />
+<button class="btn btn-primary" @onclick="click">Add</button>
+
+@code {
+    private string name;
+    private string surname;
+    private string lastname;
+    private string group;
+    private DateTime dateOfBirth;
+    static List<Students> students = new List<Students>{
+    new Students (new Random().Next(1,1000), "Samira",  "Demidova", "AlB","220", "" ,new DateTime (2006, 02,14) ),
+    new Students (new Random().Next(1,1000), "Sasha","Semenov","Hit", "220","/img/men.jpg",new DateTime (2010, 12,26) ),
+    new Students (new Random().Next(1,1000),"Mashka", "Feduary", "Aliv","220", "/img/men.jpg", new DateTime (1996, 09,24) ) };
+    private int currentCount = students.Count;
+    private void click()
+    {
+        if (String.IsNullOrEmpty(name))
+        {
+            return;
+        }
+        else if (String.IsNullOrEmpty(surname))
+        {
+            return;
+        }
+        else if (String.IsNullOrEmpty(group))
+        {
+            return;
+        }
+        else
+        {
+            currentCount++;
+            students.Add(new Students(new Random().Next(1, 1000), surname, name, lastname, group, "/img/photo.png", dateOfBirth));
+        }
+    }
+}
+<h3>Студенты</h3>
+<table class="table">
+<thead>
+    <tr>
+        <th>Id</th>
+        <th>Фамилия</th>
+        <th>Имя</th>
+        <th>Отчество</th>
+        <th>Группа</th>
+        <th>Фото</th>
+        <th>Дата рождения</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach(var student in students)
+    {
+        <tr>
+            <td>@student.Id</td>
+            <td>@student.SurName</td>
+            <td>@student.Name</td>
+            <td>@student.LastName</td>
+            <td>@student.Group</td>
+            @if (string. IsNullOrEmpty(student. Photo))
+            {
+                <td><img src="/img/photo.png" alt="заглушка" style="width: 100px;"></td>
+            }
+            else
+            {
+                <td><img src="@student.Photo" alt="@student.SurName" style="width: 100px;"></td>
+            }
+            <td>@student.DateOfBirth.ToShortDateString()</td>
+            </tr>
+    }
+
+</tbody>
+</table>
